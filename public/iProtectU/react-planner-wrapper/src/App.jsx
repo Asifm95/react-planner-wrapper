@@ -1,6 +1,5 @@
 import React from 'react';
 import MyCatalog from './catalog/mycatalog';
-import './App.css';
 import { Map } from 'immutable';
 import { createStore } from 'redux';
 import { Provider } from 'react-redux';
@@ -30,7 +29,9 @@ let reducer = (state, action) => {
 let store = createStore(
   reducer,
   null,
-  window.devToolsExtension ? window.devToolsExtension() : (f) => f
+  window.__REDUX_DEVTOOLS_EXTENSION__
+    ? window.__REDUX_DEVTOOLS_EXTENSION__()
+    : (f) => f
 );
 
 let plugins = [
