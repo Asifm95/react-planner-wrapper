@@ -28,3 +28,5 @@
 3. To run and modify library locally run `npm start`
 
 4. To generate a production build run `npm run build-prod` . The build will be generated inside dist folder
+
+5. If the library has been placed in a different directroy, make sure to update the --publicPath in the build sript in package.json
