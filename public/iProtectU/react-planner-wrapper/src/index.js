@@ -2,5 +2,5 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
 
-let mountNode = document.getElementById('planner');
+let mountNode = document.getElementById('react-planner');
 ReactDOM.render(<App />, mountNode);
