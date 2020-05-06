@@ -23,7 +23,7 @@ const config = {
               hash: 'sha512',
               digest: 'hex',
               name: '[path][name].[ext]',
-              context: 'demo/src',
+              context: 'react-planner-wrapper/src',
             },
           },
         ],
@@ -32,6 +32,12 @@ const config = {
   },
   resolve: {
     extensions: ['.js', '.jsx'],
+    alias: {
+      'react-dom': '@hot-loader/react-dom',
+    },
+  },
+  devServer: {
+    contentBase: './dist',
   },
 };
 

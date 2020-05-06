@@ -4,6 +4,7 @@ import './App.css';
 import { Map } from 'immutable';
 import { createStore } from 'redux';
 import { Provider } from 'react-redux';
+import { hot } from 'react-hot-loader/root';
 
 import {
   Models as PlannerModels,
@@ -52,4 +53,4 @@ function App() {
   );
 }
 
-export default App;
+export default hot(App);
