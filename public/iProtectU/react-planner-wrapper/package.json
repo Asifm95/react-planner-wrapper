@@ -4,10 +4,9 @@
   "description": "A react planner component",
   "main": "index.js",
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "clean": "rm -rf dist/",
+    "build-prod": "npm run clean && webpack -p --mode production --publicPath /public/iProtectU/react-planner-wrapper/dist/",
+    "start": "webpack-dev-server --hot --mode development"
   },
   "keywords": [
     "[]"
@@ -18,7 +17,9 @@
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-planner": "^2.0.6",
-    "three": "0.94.0"
+    "three": "0.94.0",
+    "react-hot-loader": "^4.12.21",
+    "react-container-dimensions": "1.4.1"
   },
   "devDependencies": {
     "webpack": "^4.43.0",
@@ -26,8 +27,13 @@
     "@babel/preset-react": "^7.9.4",
     "babel-loader": "^8.1.0",
     "@babel/core": "^7.9.6",
+    "babel-plugin-import-glob": "2.0.0",
+    "babel-plugin-transform-object-rest-spread": "6.26.0",
     "@babel/preset-env": "^7.9.6",
     "@hot-loader/react-dom": "^16.13.0+4.12.20",
-    "webpack-dev-server": "^3.10.3"
+    "webpack-dev-server": "^3.10.3",
+    "file-loader": "3.0.1",
+    "style-loader": "0.23.1",
+    "html-webpack-plugin": "^4.3.0"
   }
 }
