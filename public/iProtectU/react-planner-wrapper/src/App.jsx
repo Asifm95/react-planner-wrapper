@@ -1,5 +1,6 @@
 import React from 'react';
 import MyCatalog from './catalog/mycatalog';
+import ContainerDimensions from 'react-container-dimensions';
 import { Map } from 'immutable';
 import { createStore } from 'redux';
 import { Provider } from 'react-redux';
@@ -43,13 +44,20 @@ let plugins = [
 function App() {
   return (
     <Provider store={store}>
-      <ReactPlanner
-        catalog={MyCatalog}
-        width={window.innerWidth}
-        height={window.innerHeight}
-        plugins={plugins}
-        stateExtractor={(state) => state.get('react-planner')}
-      />
+      <ContainerDimensions>
+        {({ width, height }) => {
+          console.log(width, height, window.innerHeight);
+          return (
+            <ReactPlanner
+              catalog={MyCatalog}
+              width={width ?? window.innerWidth}
+              height={height !== 0 ? height : window.innerHeight}
+              plugins={plugins}
+              stateExtractor={(state) => state.get('react-planner')}
+            />
+          );
+        }}
+      </ContainerDimensions>
     </Provider>
   );
 }
