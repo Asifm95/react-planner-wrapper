@@ -16,7 +16,7 @@
   "dependencies": {
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
-    "react-planner": "^2.0.6",
+    "react-planner": "https://github.com/Asifm95/react-planner.git",
     "three": "0.94.0",
     "react-hot-loader": "^4.12.21",
     "react-container-dimensions": "1.4.1"
