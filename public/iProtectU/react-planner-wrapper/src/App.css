@@ -1,0 +1,29 @@
+body {
+  position: relative;
+}
+
+.action-btn {
+  display: flex;
+  position: absolute;
+  bottom: 30px;
+  right: 0;
+}
+
+.action-btn button {
+  font-weight: 400;
+  line-height: 1.25;
+  text-align: center;
+  user-select: none;
+  padding: 8px 20px;
+  font-size: 14px;
+  margin-right: 10px;
+  text-transform: capitalize;
+  color: rgb(255, 255, 255);
+  transition: background-color 175ms ease 0s, border 175ms ease 0s;
+  outline: none;
+  border-radius: 2px;
+  border-width: 1px;
+  width: 100%;
+  border-color: rgb(65, 83, 117);
+  background-color: rgb(65, 83, 117);
+}
