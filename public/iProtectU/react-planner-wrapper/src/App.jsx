@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './App.css';
 import MyCatalog from './catalog/mycatalog';
 import ContainerDimensions from 'react-container-dimensions';
@@ -17,7 +17,12 @@ import {
   Plugins as PlannerPlugins,
 } from 'react-planner';
 
-const { projectActions } = action;
+const { projectActions, viewer3DActions } = action;
+const floorPlan = {
+  plan: '',
+  '2Dpicture': '',
+  '3Dpicture': '',
+};
 //define state
 let AppState = Map({
   'react-planner': new PlannerModels.State(),
@@ -47,17 +52,55 @@ let plugins = [
 ];
 
 function App() {
+  const [modState, setModState] = useState('EXPORT');
+
   const saveHandler = async () => {
     const state = store.getState('react-planner').toJS();
-    const { mode, scene } = state['react-planner'];
-    const planData = JSON.parse(localStorage.getItem('react-planner_v0'));
-    const planImg = await generatePlan(mode);
-    const data = { picture: planImg, plan: planData };
-    console.log('data:::', data);
+    const {
+      mode,
+      sceneHistory: { list },
+    } = state['react-planner'];
+
+    switch (modState) {
+      case 'EXPORT':
+        if (list && list.length) {
+          store.dispatch(projectActions.setMode('MODE_IDLE'));
+          const planData = JSON.parse(localStorage.getItem('react-planner_v0'));
+          floorPlan.plan = planData;
+          setModState('NEXT');
+        } else {
+          window.alert('No Floor plan found');
+        }
+        break;
+
+      case 'NEXT':
+        const plan2D = await generatePlan(mode);
+        floorPlan['2Dpicture'] = plan2D;
+        store.dispatch(viewer3DActions.selectTool3DView());
+        setModState('DONE');
+        break;
+
+      case 'DONE':
+        const plan3D = await generatePlan(mode);
+        floorPlan['3Dpicture'] = plan3D;
+        console.log('final data:::', floorPlan);
+        store.dispatch(projectActions.setMode('MODE_IDLE'));
+        setModState('EXPORT');
+        break;
+
+      default:
+        setModState('EXPORT');
+        break;
+    }
   };
 
   const resetHandler = () => {
-    store.dispatch(projectActions.newProject());
+    floorPlan.plan = '';
+    floorPlan['2Dpicture'] = '';
+    floorPlan['3Dpicture'] = '';
+    store.dispatch(projectActions.setMode('MODE_IDLE'));
+    setModState('EXPORT');
+    // store.dispatch(projectActions.newProject());
   };
 
   return (
@@ -75,8 +118,10 @@ function App() {
                 stateExtractor={(state) => state.get('react-planner')}
               />
               <div className="action-btn">
-                <button onClick={resetHandler}>reset</button>
-                <button onClick={saveHandler}>done</button>
+                {modState !== 'EXPORT' && (
+                  <button onClick={resetHandler}>CANCEL</button>
+                )}
+                <button onClick={saveHandler}>{modState}</button>
               </div>
             </>
           );
