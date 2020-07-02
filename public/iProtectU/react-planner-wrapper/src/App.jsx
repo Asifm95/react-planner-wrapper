@@ -51,6 +51,32 @@ let plugins = [
   PlannerPlugins.ConsoleDebugger(),
 ];
 
+const setFloorPlan = async (planData, params) => {
+  let data = {
+    csrf_name,
+    csrf_value,
+    guid: params.get('guid'),
+    floor: params.get('floor') || 'ground',
+    section: params.get('section') || 0,
+    plan: planData.plan,
+    '2Dpicture': planData['2Dpicture'],
+    '3Dpicture': planData['3Dpicture'],
+  };
+
+  const req = await fetch('http://localhost/asbestos/floorplan', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data),
+  });
+
+  req
+    .json()
+    .then((result) => console.log(result))
+    .catch((error) => console.log('error', error));
+};
+
+const getFloorPlan = () => {};
+
 function App() {
   const [modState, setModState] = useState('EXPORT');
 
@@ -84,6 +110,7 @@ function App() {
         const plan3D = await generatePlan(mode);
         floorPlan['3Dpicture'] = plan3D;
         console.log('final data:::', floorPlan);
+        setFloorPlan(floorPlan, urlParams);
         store.dispatch(projectActions.setMode('MODE_IDLE'));
         setModState('EXPORT');
         break;
