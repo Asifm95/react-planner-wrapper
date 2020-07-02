@@ -2,10 +2,11 @@ import React, { useState } from 'react';
 import './App.css';
 import MyCatalog from './catalog/mycatalog';
 import ContainerDimensions from 'react-container-dimensions';
+import { csrf_name, csrf_value } from './utils/csrf-credential';
 import { Map } from 'immutable';
 import { createStore } from 'redux';
 import { Provider } from 'react-redux';
-import { FormSubmitButton } from './style/submit-button';
+// import { FormSubmitButton } from './style/submit-button';
 import { generatePlan } from './utils/generate-plan';
 import { hot } from 'react-hot-loader/root';
 
@@ -79,7 +80,7 @@ const getFloorPlan = () => {};
 
 function App() {
   const [modState, setModState] = useState('EXPORT');
-
+  const urlParams = new URLSearchParams(location.search);
   const saveHandler = async () => {
     const state = store.getState('react-planner').toJS();
     const {
@@ -134,7 +135,6 @@ function App() {
     <Provider store={store}>
       <ContainerDimensions>
         {({ width, height }) => {
-          console.log(width, height, window.innerHeight);
           return (
             <>
               <ReactPlanner
