@@ -9,6 +9,7 @@ import { Provider } from 'react-redux';
 // import { FormSubmitButton } from './style/submit-button';
 import { generatePlan } from './utils/generate-plan';
 import { hot } from 'react-hot-loader/root';
+import ReactTooltip from 'react-tooltip';
 
 import {
   Models as PlannerModels,
@@ -73,7 +74,10 @@ const setFloorPlan = async (planData, params) => {
 
   req
     .json()
-    .then((result) => console.log(result))
+    .then((result) => {
+      window.alert('Floor plan exported sucessfully');
+      console.log(result);
+    })
     .catch((error) => console.log('error', error));
 };
 
@@ -81,7 +85,7 @@ const getFloorPlan = () => {};
 
 function App() {
   const [modState, setModState] = useState('EXPORT');
-  const {report , ...params} = window.asbestosReport;
+  const { report, ...params } = window.asbestosReport;
   const saveHandler = async () => {
     const state = store.getState('react-planner').toJS();
     const {
@@ -131,10 +135,17 @@ function App() {
     // store.dispatch(projectActions.newProject());
   };
 
+  const setToolTipText = () => {
+    if (modState === 'EXPORT') return 'Export the floorplan with 2D & 3D view';
+    if (modState === 'NEXT') return 'Adjust the 2D view for export';
+    if (modState === 'DONE')
+      return 'Adjust the 3D view and click DONE to complete the export';
+  };
+
   useEffect(() => {
-    const { report , floor, section} = window.asbestosReport;
+    const { report, floor, section } = window.asbestosReport;
     if (report && typeof report === 'object') {
-      const scene = report?.model.floors[floor][+section]
+      const scene = report?.model.floors[floor][+section];
       store.dispatch(projectActions.loadProject(scene.plan));
     }
   }, []);
@@ -156,7 +167,15 @@ function App() {
                 {modState !== 'EXPORT' && (
                   <button onClick={resetHandler}>CANCEL</button>
                 )}
-                <button onClick={saveHandler}>{modState}</button>
+                <button data-for="buttonTip" onClick={saveHandler} data-tip>
+                  {modState}
+                </button>
+                <ReactTooltip
+                  id="buttonTip"
+                  place="top"
+                  effect="solid"
+                  getContent={setToolTipText}
+                />
               </div>
             </>
           );
