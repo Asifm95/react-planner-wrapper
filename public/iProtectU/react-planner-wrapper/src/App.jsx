@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './App.css';
 import MyCatalog from './catalog/mycatalog';
 import ContainerDimensions from 'react-container-dimensions';
@@ -56,14 +56,15 @@ const setFloorPlan = async (planData, params) => {
   let data = {
     csrf_name,
     csrf_value,
-    guid: params.get('guid'),
-    floor: params.get('floor') || 'ground',
-    section: params.get('section') || 0,
+    guid: params.guid,
+    floor: params.floor || 'ground',
+    section: params.section || 0,
     plan: planData.plan,
     '2Dpicture': planData['2Dpicture'],
     '3Dpicture': planData['3Dpicture'],
   };
 
+  console.log('final data:::', data);
   const req = await fetch('http://localhost/asbestos/floorplan', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -80,11 +81,12 @@ const getFloorPlan = () => {};
 
 function App() {
   const [modState, setModState] = useState('EXPORT');
-  const urlParams = new URLSearchParams(location.search);
+  const {report , ...params} = window.asbestosReport;
   const saveHandler = async () => {
     const state = store.getState('react-planner').toJS();
     const {
       mode,
+      scene,
       sceneHistory: { list },
     } = state['react-planner'];
 
@@ -92,8 +94,7 @@ function App() {
       case 'EXPORT':
         if (list && list.length) {
           store.dispatch(projectActions.setMode('MODE_IDLE'));
-          const planData = JSON.parse(localStorage.getItem('react-planner_v0'));
-          floorPlan.plan = planData;
+          floorPlan.plan = scene;
           setModState('NEXT');
         } else {
           window.alert('No Floor plan found');
@@ -110,8 +111,7 @@ function App() {
       case 'DONE':
         const plan3D = await generatePlan(mode);
         floorPlan['3Dpicture'] = plan3D;
-        console.log('final data:::', floorPlan);
-        setFloorPlan(floorPlan, urlParams);
+        setFloorPlan(floorPlan, params);
         store.dispatch(projectActions.setMode('MODE_IDLE'));
         setModState('EXPORT');
         break;
@@ -130,6 +130,14 @@ function App() {
     setModState('EXPORT');
     // store.dispatch(projectActions.newProject());
   };
+
+  useEffect(() => {
+    const { report , floor, section} = window.asbestosReport;
+    if (report && typeof report === 'object') {
+      const scene = report?.model.floors[floor][+section]
+      store.dispatch(projectActions.loadProject(JSON.parse(scene)));
+    }
+  }, []);
 
   return (
     <Provider store={store}>
