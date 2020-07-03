@@ -144,7 +144,12 @@ function App() {
     if (modState === 'SAVE') return 'Export the floorplan with 2D & 3D view';
     if (modState === 'NEXT') return 'Adjust the 2D view for export';
     if (modState === 'DONE')
-      return 'Adjust the 3D view and click DONE to complete the export';
+      return 'Adjust the 3D view & click DONE to complete the export';
+  };
+
+  const handleUserKeyPress = (event) => {
+    const { key, keyCode } = event;
+    if (key === 'ESCAPE' || keyCode === 27) resetHandler();
   };
 
   useEffect(() => {
@@ -154,6 +159,13 @@ function App() {
       store.dispatch(projectActions.loadProject(scene.plan));
     }
   }, []);
+
+  useEffect(() => {
+    window.addEventListener('keyup', handleUserKeyPress);
+    return () => {
+      window.removeEventListener('keyup', handleUserKeyPress);
+    };
+  }, [handleUserKeyPress]);
 
   return (
     <Provider store={store}>
@@ -183,7 +195,6 @@ function App() {
                 <ReactTooltip
                   id="buttonTip"
                   place="top"
-                  effect="solid"
                   getContent={setToolTipText}
                 />
               </div>
