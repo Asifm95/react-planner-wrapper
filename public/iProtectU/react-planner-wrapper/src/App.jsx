@@ -96,7 +96,7 @@ function App() {
     } = state['react-planner'];
 
     switch (modState) {
-      case 'EXPORT':
+      case 'SAVE':
         if (list && list.length) {
           store.dispatch(projectActions.setMode('MODE_IDLE'));
           floorPlan.plan = scene;
@@ -122,11 +122,11 @@ function App() {
         floorPlan['3Dpicture'] = plan3D;
         setFloorPlan(floorPlan, params);
         store.dispatch(projectActions.setMode('MODE_IDLE'));
-        setModState('EXPORT');
+        setModState('SAVE');
         break;
 
       default:
-        setModState('EXPORT');
+        setModState('SAVE');
         break;
     }
   };
@@ -136,12 +136,12 @@ function App() {
     floorPlan['2Dpicture'] = '';
     floorPlan['3Dpicture'] = '';
     store.dispatch(projectActions.setMode('MODE_IDLE'));
-    setModState('EXPORT');
+    setModState('SAVE');
     // store.dispatch(projectActions.newProject());
   };
 
   const setToolTipText = () => {
-    if (modState === 'EXPORT') return 'Export the floorplan with 2D & 3D view';
+    if (modState === 'SAVE') return 'Export the floorplan with 2D & 3D view';
     if (modState === 'NEXT') return 'Adjust the 2D view for export';
     if (modState === 'DONE')
       return 'Adjust the 3D view and click DONE to complete the export';
@@ -169,7 +169,7 @@ function App() {
                 stateExtractor={(state) => state.get('react-planner')}
               />
               <div className="action-btn">
-                {modState !== 'EXPORT' && (
+                {modState !== 'SAVE' && (
                   <button onClick={resetHandler}>CANCEL</button>
                 )}
                 <button
