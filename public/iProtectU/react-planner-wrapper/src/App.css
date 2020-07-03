@@ -26,4 +26,11 @@ body {
   width: 100%;
   border-color: rgb(65, 83, 117);
   background-color: rgb(65, 83, 117);
+  cursor: pointer;
+}
+
+.action-btn button:disabled {
+  border-color: rgb(65, 83, 117);
+  background-color: rgb(121, 138, 170);
+  cursor: not-allowed;
 }
