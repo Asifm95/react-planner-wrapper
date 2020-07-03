@@ -135,7 +135,7 @@ function App() {
     const { report , floor, section} = window.asbestosReport;
     if (report && typeof report === 'object') {
       const scene = report?.model.floors[floor][+section]
-      store.dispatch(projectActions.loadProject(scene));
+      store.dispatch(projectActions.loadProject(scene.plan));
     }
   }, []);
 
