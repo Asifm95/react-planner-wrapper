@@ -84,7 +84,8 @@ const setFloorPlan = async (planData, params) => {
 const getFloorPlan = () => {};
 
 function App() {
-  const [modState, setModState] = useState('EXPORT');
+  const [modState, setModState] = useState('SAVE');
+  const [disableBtn, setDisableBtn] = useState(false);
   const { report, ...params } = window.asbestosReport;
   const saveHandler = async () => {
     const state = store.getState('react-planner').toJS();
@@ -108,7 +109,11 @@ function App() {
       case 'NEXT':
         const plan2D = await generatePlan(mode);
         floorPlan['2Dpicture'] = plan2D;
+        setDisableBtn(true);
         store.dispatch(viewer3DActions.selectTool3DView());
+        setTimeout(() => {
+          setDisableBtn(false);
+        }, 600);
         setModState('DONE');
         break;
 
@@ -167,7 +172,12 @@ function App() {
                 {modState !== 'EXPORT' && (
                   <button onClick={resetHandler}>CANCEL</button>
                 )}
-                <button data-for="buttonTip" onClick={saveHandler} data-tip>
+                <button
+                  data-for="buttonTip"
+                  onClick={saveHandler}
+                  data-tip
+                  disabled={disableBtn}
+                >
                   {modState}
                 </button>
                 <ReactTooltip
