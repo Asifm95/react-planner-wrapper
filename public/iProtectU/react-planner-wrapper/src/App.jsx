@@ -6,11 +6,9 @@ import { csrf_name, csrf_value } from './utils/csrf-credential';
 import { Map } from 'immutable';
 import { createStore } from 'redux';
 import { Provider } from 'react-redux';
-// import { FormSubmitButton } from './style/submit-button';
 import { generatePlan } from './utils/generate-plan';
 import { hot } from 'react-hot-loader/root';
 import ReactTooltip from 'react-tooltip';
-
 import {
   Models as PlannerModels,
   reducer as PlannerReducer,
@@ -65,8 +63,9 @@ const setFloorPlan = async (planData, params) => {
     '3Dpicture': planData['3Dpicture'],
   };
 
-  console.log('final data:::', data);
-  const req = await fetch('http://localhost/asbestos/floorplan', {
+  const origin = window.location.origin.replace(/:[\d]+/, '');
+  console.log('final data:::', data, origin);
+  const req = await fetch(`${origin}/asbestos/floorplan`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(data),
