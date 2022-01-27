@@ -20,7 +20,7 @@
     "react-hot-loader": "^4.12.21",
     "react-planner": "https://github.com/Asifm95/react-planner.git",
     "react-tooltip": "^4.2.7",
-    "three": "0.94.0"
+    "three": "0.137.0"
   },
   "devDependencies": {
     "webpack": "^4.43.0",
